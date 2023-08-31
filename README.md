@@ -9,6 +9,7 @@
 Запуск скрипта:
 
 cmod +x /XenMigrateToProxmox.sh
+
  ./XenMigrateToProxmox.sh xen 847fb7ef-5d76-3e2c-e507-e17906b923c5 XXX-THINLVM-DEDUP-FC
 
  Параметры скрипта:
