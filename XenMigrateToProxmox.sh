@@ -1,13 +1,12 @@
 #!/bin/bash
 #Xen Migrate To Proxmox
 #Version 1.0
-#Description: The script outputs data about user logins to the ARM.
-#Aleksey Nesterenko 2023
+#Author : Aleksey Nesterenko 2023
 # example ./XenMigrateToProxmox.sh xen db83f273-ade0-1585-b1fa-b6197353c4df SHD-ZFS0-FC 
 ####################################↑#############↑############################↑#########################################################
 #############################Имя сервера######UUID Виртуальной машины####Диск для размещения ВМ##########################################
 #########################################################################################################################################
-function ProgressBar {
+function ProgressBar { # Teddy Skarin https://github.com/fearside/ProgressBar
 # Process data
 	let _progress=(${1}*100/${2}*100)/100
 	let _done=(${_progress}*4)/10
