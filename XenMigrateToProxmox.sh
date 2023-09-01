@@ -3,7 +3,6 @@
 #Version 1.0
 #Description: The script outputs data about user logins to the ARM.
 #Aleksey Nesterenko 2023
-
 # example ./XenMigrateToProxmox.sh xen db83f273-ade0-1585-b1fa-b6197353c4df SHD-ZFS0-FC 
 ####################################↑#############↑############################↑#########################################################
 #############################Имя сервера######UUID Виртуальной машины####Диск для размещения ВМ##########################################
@@ -23,6 +22,7 @@ function ProgressBar {
 printf "\rProgress : [${_done// /#}${_left// /-}] ${_progress}%%"
 
 }
+echo "Проверка наличия пакетов, необходимых для выполнения скрипта:"
 set -e
 if [ $(dpkg-query -W -f='${Status}' xml2 2>/dev/null | grep -c "ok installed") -eq 0 ];
 then
@@ -32,10 +32,8 @@ else
 echo "Пакет XML2 обнаружен в системе "
 fi
 set +e
-
-
-
 srv=$1                                                                                  #Переменная хранения имени сервера
+echo ""
 echo "	  Запуск скрипта миграции VM  с сервера $srv XCP-NG"
 echo "в среду гипервизора $HOSTNAME Proxmox Virtual Environment"
 disk=$3                                                                                 #Переменная хранения имени хранилища
@@ -49,8 +47,6 @@ wget --http-user=root --http-password=$password http://$srv/export?uuid=$2 -O - 
 echo "Экспорт VM UUID : $2 завершен"
 password="********"                                                                      #Очистка пароля
 set +o pipefail +e
-
-echo "Проверка наличия пакетов, необходимых для выполнения скрипта:"
 mv ova.xml $vmid.xml --force
 echo ""
 echo "Получение параметров экспортируемой виртуальной машины"
@@ -89,10 +85,9 @@ echo "MAC : $mac"
 echo "FIRM : $firmware"
 echo "RAM : $memory"
 echo "Ядра : $cores"
-cd $VDIs
 echo " "
 echo "Запуск процесса конвертации"
-
+cd $VDIs
 dd if=/dev/zero of=blank bs=1024 count=1k
 test -f $name.img && rm -f $name.img
 touch $name.img
