@@ -42,8 +42,15 @@ read -sp "Введите пароль для доступа к $srv: " password
 echo " "
 echo "Запуск процесса экспорта VM  UUID : $2"
 set -o pipefail -e
+start0=`date +%s`
 wget --http-user=root --http-password=$password http://$srv/export?uuid=$2 -O - | tar vxf -
-echo "Экспорт VM UUID : $2 завершен"
+end=`date +%s`
+runtime=$(($end-$start0))
+hours=$(($runtime / 3600))
+minutes=$(( ($runtime % 3600) / 60 ))
+seconds=$(( ($runtime % 3600) % 60 ))
+echo "Экспорт VM UUID : $2 завершен за $hours:$minutes:$seconds"
+ 
 password="********"                                                                      #Очистка пароля
 set +o pipefail +e
 mv ova.xml $vmid.xml --force
@@ -86,6 +93,7 @@ echo "RAM : $memory"
 echo "Ядра : $cores"
 echo " "
 echo "Запуск процесса конвертации"
+start1=`date +%s`
 cd $VDIs
 dd if=/dev/zero of=blank bs=1024 count=1k
 test -f $name.img && rm -f $name.img
@@ -103,14 +111,24 @@ for i in `seq 0 $max`; do
 		ProgressBar ${i} ${end}
 done
 rm -f blank
-
-echo "Конвертация в IMG завершена."
+end=`date +%s`
+runtime=$(($end-$start1))
+hours=$(($runtime / 3600))
+minutes=$(( ($runtime % 3600) / 60 ))
+seconds=$(( ($runtime % 3600) % 60 ))
+echo "Конвертация в IMG завершена за $hours:$minutes:$seconds"
 
 echo "Запуск процесса конвертации IMG в QCOW2."
+start2=`date +%s`
 set -e
 qemu-img convert -f raw -O qcow2 $name.img $name.qcow2
 set +e
-echo "конвертация IMG в qcow2 завершена."
+end=`date +%s`
+runtime=$(($end-$start2))
+hours=$(($runtime / 3600))
+minutes=$(( ($runtime % 3600) / 60 ))
+seconds=$(( ($runtime % 3600) % 60 ))
+echo "конвертация IMG в qcow2 завершена за $hours:$minutes:$seconds"
 echo "Создание VM $vmid $name."
 set -e
 if [[ $firmware == "bios" ]] || [[ $firmware == $null ]]; 
@@ -127,6 +145,7 @@ set +e
 echo "BIOS : $bios"
 
 echo "Создание VM $vmid $name завершено успешно"
+start3=`date +%s`
 echo "Загрузка диска VM $vmid $name на хранилище $disk"
 set -e
 qm importdisk $vmid $name.qcow2 $disk 
@@ -135,9 +154,19 @@ echo "Настройка VM $vmid $name"
 
 qm set $vmid --agent enabled=1,fstrim_cloned_disks=1 --sata0 $disk:vm-$vmid-disk-$did,ssd=1 --boot order='sata0' -sata1 ISO-BACKUPSRV-SMB:iso/virtio-win-0.1.229.iso,media=cdrom
 cd ..
-
-echo "Создание и настройка VM $vmid $name завершены успешно"
+end=`date +%s`
+runtime=$(($end-$start3))
+hours=$(($runtime / 3600))
+minutes=$(( ($runtime % 3600) / 60 ))
+seconds=$(( ($runtime % 3600) % 60 ))
+echo "Создание и настройка VM $vmid $name завершены успешно за $hours:$minutes:$seconds"
 echo "Удаление временных файлов"
 rm -rf Ref*
 rm -f $vmid.xml
 echo "Работа скрипта завершена"
+end=`date +%s`
+runtime=$(($end-$start0))
+hours=$(($runtime / 3600))
+minutes=$(( ($runtime % 3600) / 60 ))
+seconds=$(( ($runtime % 3600) % 60 ))
+echo "Общее время выполнения  ::  $hours:$minutes:$seconds"
