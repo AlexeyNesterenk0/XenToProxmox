@@ -21,6 +21,15 @@ function ProgressBar { # автор функции Teddy Skarin https://github.c
 printf "\rProgress : [${_done// /#}${_left// /-}] ${_progress}%%"
 
 }
+
+function TimeStamp {
+	end=`date +%s`
+	runtime=$(($end-${1}))
+	hours=$(($runtime / 3600))
+	minutes=$(( ($runtime % 3600) / 60 ))
+	seconds=$(( ($runtime % 3600) % 60 ))
+	echo "$hours:$minutes:$seconds"
+}
 echo "Проверка наличия пакетов, необходимых для выполнения скрипта:"
 set -e
 if [ $(dpkg-query -W -f='${Status}' xml2 2>/dev/null | grep -c "ok installed") -eq 0 ];
@@ -44,13 +53,8 @@ echo "Запуск процесса экспорта VM  UUID : $2"
 set -o pipefail -e
 start0=`date +%s`
 wget --http-user=root --http-password=$password http://$srv/export?uuid=$2 -O - | tar vxf -
-end=`date +%s`
-runtime=$(($end-$start0))
-hours=$(($runtime / 3600))
-minutes=$(( ($runtime % 3600) / 60 ))
-seconds=$(( ($runtime % 3600) % 60 ))
-echo "Экспорт VM UUID : $2 завершен за $hours:$minutes:$seconds"
- 
+echo -n "Экспорт VM UUID : $2 завершен за " 
+TimeStamp ${start0}
 password="********"                                                                      #Очистка пароля
 set +o pipefail +e
 mv ova.xml $vmid.xml --force
@@ -111,24 +115,16 @@ for i in `seq 0 $max`; do
 		ProgressBar ${i} ${end}
 done
 rm -f blank
-end=`date +%s`
-runtime=$(($end-$start1))
-hours=$(($runtime / 3600))
-minutes=$(( ($runtime % 3600) / 60 ))
-seconds=$(( ($runtime % 3600) % 60 ))
-echo "Конвертация в IMG завершена за $hours:$minutes:$seconds"
-
+echo -n "Конвертация в IMG завершена за"
+TimeStamp ${start1}
 echo "Запуск процесса конвертации IMG в QCOW2."
 start2=`date +%s`
 set -e
 qemu-img convert -f raw -O qcow2 $name.img $name.qcow2
 set +e
 end=`date +%s`
-runtime=$(($end-$start2))
-hours=$(($runtime / 3600))
-minutes=$(( ($runtime % 3600) / 60 ))
-seconds=$(( ($runtime % 3600) % 60 ))
-echo "конвертация IMG в qcow2 завершена за $hours:$minutes:$seconds"
+echo -n "Конвертация IMG в qcow2 завершена за"
+TimeStamp ${start2}
 echo "Создание VM $vmid $name."
 set -e
 if [[ $firmware == "bios" ]] || [[ $firmware == $null ]]; 
@@ -155,18 +151,12 @@ echo "Настройка VM $vmid $name"
 qm set $vmid --agent enabled=1,fstrim_cloned_disks=1 --sata0 $disk:vm-$vmid-disk-$did,ssd=1 --boot order='sata0' -sata1 ISO-BACKUPSRV-SMB:iso/virtio-win-0.1.229.iso,media=cdrom
 cd ..
 end=`date +%s`
-runtime=$(($end-$start3))
-hours=$(($runtime / 3600))
-minutes=$(( ($runtime % 3600) / 60 ))
-seconds=$(( ($runtime % 3600) % 60 ))
-echo "Создание и настройка VM $vmid $name завершены успешно за $hours:$minutes:$seconds"
+echo -n "Создание и настройка VM $vmid $name завершены успешно за"
+TimeStamp ${start3}
 echo "Удаление временных файлов"
 rm -rf Ref*
 rm -f $vmid.xml
 echo "Работа скрипта завершена"
 end=`date +%s`
-runtime=$(($end-$start0))
-hours=$(($runtime / 3600))
-minutes=$(( ($runtime % 3600) / 60 ))
-seconds=$(( ($runtime % 3600) % 60 ))
-echo "Общее время выполнения  ::  $hours:$minutes:$seconds"
+echo -n "Общее время выполнения  ::  "
+TimeStamp ${start0}
