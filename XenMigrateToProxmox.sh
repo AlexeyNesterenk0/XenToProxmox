@@ -52,7 +52,7 @@ echo " "
 echo "Запуск процесса экспорта VM  UUID : $2"
 set -o pipefail -e
 start0=`date +%s`
-wget --http-user=root --http-password=$password http://$srv/export?uuid=$2 -O - | tar -xf --total -
+wget --http-user=root --http-password=$password http://$srv/export?uuid=$2 -O - | tar xf --total -
 echo -n "Экспорт VM UUID : $2 завершен за " 
 TimeStamp ${start0}
 password="********"                                                                      #Очистка пароля
