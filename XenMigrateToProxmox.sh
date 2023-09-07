@@ -104,7 +104,7 @@ test -f $name.img && rm -f $name.img
 touch $name.img
 
 max=`ls ???????? | sort | tail -n1`
-end=$(ls -l | grep -v $name | wc -l)
+end=$(ls -l ???????? | grep -v $name | wc -l)
 for i in `seq 0 $max`; do
         fn=`printf "%08d" $i`
         if [ -f "$fn" ]; then
