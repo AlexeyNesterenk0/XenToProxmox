@@ -104,7 +104,6 @@ test -f $name.img && rm -f $name.img
 touch $name.img
 
 max=`ls ???????? | sort | tail -n1`
-end=$(ls -l | grep -v $name | wc -l)
 for i in `seq 0 $max`; do
         fn=`printf "%08d" $i`
         if [ -f "$fn" ]; then
@@ -112,7 +111,7 @@ for i in `seq 0 $max`; do
         else
                 cat blank >> $name.img
         fi
-		ProgressBar ${i} ${end}
+		ProgressBar ${i} ${max}
 done
 rm -f blank
 echo -n "Конвертация в IMG завершена за "
