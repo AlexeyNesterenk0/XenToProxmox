@@ -115,7 +115,7 @@ for i in `seq 0 $max`; do
 		ProgressBar ${i} ${end}
 done
 rm -f blank
-echo -n "Конвертация в IMG завершена за"
+echo -n "Конвертация в IMG завершена за "
 TimeStamp ${start1}
 echo "Запуск процесса конвертации IMG в QCOW2."
 start2=`date +%s`
@@ -123,7 +123,7 @@ set -e
 qemu-img convert -f raw -O qcow2 $name.img $name.qcow2
 set +e
 end=`date +%s`
-echo -n "Конвертация IMG в qcow2 завершена за"
+echo -n "Конвертация IMG в qcow2 завершена за "
 TimeStamp ${start2}
 echo "Создание VM $vmid $name."
 set -e
@@ -151,7 +151,7 @@ echo "Настройка VM $vmid $name"
 qm set $vmid --agent enabled=1,fstrim_cloned_disks=1 --sata0 $disk:vm-$vmid-disk-$did,ssd=1 --boot order='sata0' -sata1 ISO-BACKUPSRV-SMB:iso/virtio-win-0.1.229.iso,media=cdrom
 cd ..
 end=`date +%s`
-echo -n "Создание и настройка VM $vmid $name завершены успешно за"
+echo -n "Создание и настройка VM $vmid $name завершены успешно за "
 TimeStamp ${start3}
 echo "Удаление временных файлов"
 rm -rf Ref*
