@@ -51,7 +51,7 @@ read -sp "Введите пароль для доступа к $srv: " password
 echo " "
 echo "Запуск процесса экспорта VM  UUID : $2"
 set -o pipefail -e
-start0=`date +%s`
+start0=`date +%s`									#Якорь для функции TimeStamp
 wget --http-user=root --http-password=$password http://$srv/export?uuid=$2 -O - | tar xf --total -
 echo -n "Экспорт VM UUID : $2 завершен за " 
 TimeStamp ${start0}
@@ -97,7 +97,7 @@ echo "RAM : $memory"
 echo "Ядра : $cores"
 echo " "
 echo "Запуск процесса конвертации"
-start1=`date +%s`
+start1=`date +%s`																#Якорь для функции TimeStamp
 cd $VDIs
 dd if=/dev/zero of=blank bs=1024 count=1k
 test -f $name.img && rm -f $name.img
@@ -117,7 +117,7 @@ rm -f blank
 echo -n "Конвертация в IMG завершена за "
 TimeStamp ${start1}
 echo "Запуск процесса конвертации IMG в QCOW2."
-start2=`date +%s`
+start2=`date +%s`																#Якорь для функции TimeStamp
 set -e
 qemu-img convert -f raw -O qcow2 $name.img $name.qcow2
 set +e
@@ -140,7 +140,7 @@ set +e
 echo "BIOS : $bios"
 
 echo "Создание VM $vmid $name завершено успешно"
-start3=`date +%s`
+start3=`date +%s`																	#Якорь для функции TimeStamp
 echo "Загрузка диска VM $vmid $name на хранилище $disk"
 set -e
 qm importdisk $vmid $name.qcow2 $disk 
