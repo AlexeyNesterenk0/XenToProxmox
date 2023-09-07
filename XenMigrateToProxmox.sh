@@ -45,7 +45,8 @@ echo ""
 echo "	  Запуск скрипта миграции VM  с сервера $srv XCP-NG"
 echo "в среду гипервизора $HOSTNAME Proxmox Virtual Environment"
 disk=$3                                                                                 #Переменная хранения имени хранилища
-let vmid=$(qm list | awk {'print $1'} | grep -v VMID | sort -rn | head -n 1)+100
+let vmid=$(qm list | awk {'print $1'} | grep -v VMID | sort -rn | head -n 1)+100	#Автоматическое присвоение ИД ВМ
+#vmid=$4										#Ручное присвоение ИД ВМ
 read -sp "Введите пароль для доступа к $srv: " password
 echo " "
 echo "Запуск процесса экспорта VM  UUID : $2"
