@@ -6,6 +6,17 @@
 ####################################↑#############↑############################↑#########################################################
 #############################Имя сервера######UUID Виртуальной машины####Диск для размещения ВМ##########################################
 #########################################################################################################################################
+function InputData
+{
+	INPUT=$(whiptail --title "$1" "$2"  "$3" 10 60 3>&1 1>&2 2>&3)
+
+	exitstatus=$?
+	if [ $exitstatus = 0 ]; then
+     	   echo $INPUT
+	else
+		exit	
+	fi
+}
 function ProgressBar { # автор функции Teddy Skarin https://github.com/fearside/ProgressBar
 # Process data
 	let _progress=(${1}*100/${2}*100)/100
@@ -40,15 +51,71 @@ else
 echo "Пакет XML2 обнаружен в системе "
 fi
 set +e
-srv=$1                                                                                  #Переменная хранения имени сервера
+
+if [[ $1 -eq "--mn" ]]
+	then
+		MenuOn=1
+fi
+if [[ $2 -eq "--autovmid"  ||  $4 -eq "--autovmid" ]]
+	then
+		AutoVmID=1
+fi
+set +e
+if [[ $MenuOn == 1 ]]
+	then
+		srv=$(InputData "Ввод данных" "--inputbox" "Введите имя сервера Xen")
+	else
+		srv=$1 
+fi		#Переменная хранения имени сервера
+
+if [[ $MenuOn == 1 ]]
+	then
+		mn=$(pvesm status | awk '{print $1 " " $2}' | grep -v "Name")
+		OPTION=$(whiptail --title "Выберите куда расположить диск ВМ" --menu "Выберите хранилище:" 15 60 4 \
+		`for i in ${mn[@]} ; do echo $i ; done`  3>&1 1>&2 2>&3)
+		exitstatus=$?
+		if [ $exitstatus = 0 ] 
+			then
+				disk=$OPTION
+			y
+			else
+				echo "Отказ от ввода."
+				exit
+			fi
+	else
+		disk=$3  
+fi
+                                                                          
+let vmid=$(qm list | awk {'print $1'} | grep -v VMID | sort -rn | head -n 1)+10	#Автоматическое присвоение ИД ВМ
+						
+if [[ $AutoVmID == 1 ]]
+	then
+		let vmid=$(qm list | awk {'print $1'} | grep -v VMID | sort -rn | head -n 1)+10
+	else
+		if [[ $MenuOn == 1 ]]
+			then
+				vmid=$(InputData "Ввод данных" "--inputbox"  "Введите ID ВМ")  #Ручное присвоение ИД ВМ через граффический интерфейс
+			else
+				vmid=$4								#Ручное присвоение ИД ВМ
+			fi
+fi
+if [[ $MenuOn == 1 ]]
+	then
+		UUID=$(InputData "Ввод данных" "--inputbox"  "Введите UUID ВМ")  
+	else
+		UUID=$2
+fi
+if [[ $MenuOn == 1 ]]
+	then
+		password=$(InputData "Ввод пароля" "--passwordbox" "Введите пароль $srv")
+	else
+		read -sp "Введите пароль для доступа к $srv: " password
+fi
 echo ""
 echo "	  Запуск скрипта миграции VM  с сервера $srv XCP-NG"
 echo "в среду гипервизора $HOSTNAME Proxmox Virtual Environment"
-disk=$3                                                                                 #Переменная хранения имени хранилища
-let vmid=$(qm list | awk {'print $1'} | grep -v VMID | sort -rn | head -n 1)+100	#Автоматическое присвоение ИД ВМ
-#vmid=$4										#Ручное присвоение ИД ВМ
-read -sp "Введите пароль для доступа к $srv: " password
 echo " "
+
 echo "Запуск процесса экспорта VM  UUID : $2"
 set -o pipefail -e
 start0=`date +%s`									#Якорь для функции TimeStamp
