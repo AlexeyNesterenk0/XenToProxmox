@@ -173,7 +173,7 @@ dd if=/dev/zero of=blank bs=1024 count=1k
 test -f $name.img && rm -f $name.img
 touch $name.img
 
-max=`ls ???????? | sort | tail -n1` | awk '$0*=1'`
+max=`ls ???????? | sort | tail -n1 | awk '$0*=1'`
 for i in `seq 0 $max`; do
         fn=`printf "%08d" $i`
         if [ -f "$fn" ]; then
