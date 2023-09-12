@@ -52,11 +52,16 @@ echo "Пакет XML2 обнаружен в системе "
 fi
 set +e
 
-if [[ $1 -eq "--mn" ]]
+if [[ $1 == "--m" ]]
 	then
 		MenuOn=1
 fi
-if [[ $2 -eq "--autovmid"  ||  $4 -eq "--autovmid" ]]
+if [[ $1 == "--ma" ]]
+	then
+		MenuOn=1
+		AutoVmID=1
+fi
+if [[ $4 == "--a" ]]
 	then
 		AutoVmID=1
 fi
@@ -85,20 +90,18 @@ if [[ $MenuOn == 1 ]]
 	else
 		disk=$3  
 fi
-                                                                          
-let vmid=$(qm list | awk {'print $1'} | grep -v VMID | sort -rn | head -n 1)+10	#Автоматическое присвоение ИД ВМ
-						
 if [[ $AutoVmID == 1 ]]
 	then
 		let vmid=$(qm list | awk {'print $1'} | grep -v VMID | sort -rn | head -n 1)+10
 	else
 		if [[ $MenuOn == 1 ]]
 			then
-				vmid=$(InputData "Ввод данных" "--inputbox"  "Введите ID ВМ")  #Ручное присвоение ИД ВМ через граффический интерфейс
+				vmid=$(InputData "Ввод данных" "--inputbox"  "Введите ID ВМ") 
 			else
-				vmid=$4								#Ручное присвоение ИД ВМ
-			fi
-fi
+				vmid=$4
+		fi
+fi                                                                          
+
 if [[ $MenuOn == 1 ]]
 	then
 		UUID=$(InputData "Ввод данных" "--inputbox"  "Введите UUID ВМ")  
@@ -116,11 +119,11 @@ echo "	  Запуск скрипта миграции VM  с сервера $srv
 echo "в среду гипервизора $HOSTNAME Proxmox Virtual Environment"
 echo " "
 
-echo "Запуск процесса экспорта VM  UUID : $2"
+echo "Запуск процесса экспорта VM  UUID : $UUID"
 set -o pipefail -e
 start0=`date +%s`									#Якорь для функции TimeStamp
-wget --http-user=root --http-password=$password http://$srv/export?uuid=$2 -O - | tar xf -
-echo -n "Экспорт VM UUID : $2 завершен за " 
+wget --http-user=root --http-password=$password http://$srv/export?uuid=$UUID -O - | tar xf -
+echo -n "Экспорт VM UUID : $UUID завершен за " 
 TimeStamp ${start0}
 password="********"                                                                      #Очистка пароля
 set +o pipefail +e
