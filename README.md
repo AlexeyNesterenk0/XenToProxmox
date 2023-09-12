@@ -17,14 +17,25 @@
 Запуск скрипта:
 
                     cmod +x XenMigrateToProxmox.sh
-
-                    ./XenMigrateToProxmox.sh xen 847fb7ef-5d76-3e2c-e507-e17906b923c5 XXX-THINLVM-DEDUP-FC
+                    
+                    ./XenMigrateToProxmox.sh {$1} {$2} {$3} {$4}
+Примеры:
+                    ./XenMigrateToProxmox.sh xen 847fb7ef-5d76-3e2c-e507-e17906b923c5 XXX-THINLVM-DEDUP-FC 100
+                    ./XenMigrateToProxmox.sh xen 847fb7ef-5d76-3e2c-e507-e17906b923c5 XXX-THINLVM-DEDUP-FC --a
+                    ./XenMigrateToProxmox.sh --m
+                    ./XenMigrateToProxmox.sh --ma
+                    
 
  Параметры скрипта:
  
-                     $1 - Имя сервера XCP-NG
+                     $1 - Имя сервера XCP-NG 
+                         --m  вместо имени сервера включает GUI для запросов параметров
+                         --ma  вместо имени сервера включает GUI для запросов параметров 
+                           и автоматическое присвоение ИД виртуальной машине
                      $2 - UUID виртуальной машины на XEN
                      $3 - Имя хранилища, на котором будет размещен диск виртуальной машины на PVE
+                     $4 - ИД виртуальной машины
+                         --a  вместо ИД виртуальной машины включает автоматическое присвоение ИД виртуальной машине
 
 После запуска скрипт запрашивает пароль доступа к консоли XEN
 
