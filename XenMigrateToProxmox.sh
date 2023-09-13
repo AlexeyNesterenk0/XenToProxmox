@@ -50,8 +50,6 @@ then
 else
 echo "Пакет XML2 обнаружен в системе "
 fi
-set +e
-
 if [[ $1 == "--m" ]]
 	then
 		MenuOn=1
@@ -65,7 +63,6 @@ if [[ $4 == "--a" ]]
 	then
 		AutoVmID=1
 fi
-set +e
 if [[ $MenuOn == 1 ]]
 	then
 		srv=$(InputData "Ввод данных" "--inputbox" "Введите имя сервера Xen")
