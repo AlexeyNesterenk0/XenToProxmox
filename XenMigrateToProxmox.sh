@@ -147,12 +147,6 @@ if  [[ $memory == $null ]];
 	then
         cores=4096;
 fi
-VDIs=$(xml2 < $vmid.xml | grep -A 1 =VDIs | grep -v =VDIs | grep -Po "(?<==).*$")
-if  [[ $VDIs == $null ]]; 
-	then
-        echo "Невозможно выполнить конвертацию. Работа скрипта завершена";
-        exit;
-fi
 firmware=$(xml2 < $vmid.xml | grep -A 1 =firmware | grep -v =firmware | grep -Po "(?<==).*$")
 
 echo " "
@@ -165,7 +159,7 @@ echo "Ядра : $cores"
 echo " "
 echo "Запуск процесса конвертации"
 start1=`date +%s`																#Якорь для функции TimeStamp
-cd $VDIs
+cd Ref:*
 dd if=/dev/zero of=blank bs=1024 count=1k
 test -f $name.img && rm -f $name.img
 touch $name.img
