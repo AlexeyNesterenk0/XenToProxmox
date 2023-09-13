@@ -16,10 +16,11 @@
 
 Запуск скрипта:
 
-                    cmod +x XenMigrateToProxmox.sh
-                    
+                    cmod +x XenMigrateToProxmox.sh                    
                     ./XenMigrateToProxmox.sh {$1} {$2} {$3} {$4}
+                    
 Примеры:
+
                     ./XenMigrateToProxmox.sh xen 847fb7ef-5d76-3e2c-e507-e17906b923c5 XXX-THINLVM-DEDUP-FC 100
                     ./XenMigrateToProxmox.sh xen 847fb7ef-5d76-3e2c-e507-e17906b923c5 XXX-THINLVM-DEDUP-FC --a
                     ./XenMigrateToProxmox.sh --m
