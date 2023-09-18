@@ -21,6 +21,8 @@
                     
 Примеры:
 
+
+
                     ./XenMigrateToProxmox.sh xen 847fb7ef-5d76-3e2c-e507-e17906b923c5 XXX-THINLVM-DEDUP-FC 100
                     ./XenMigrateToProxmox.sh xen 847fb7ef-5d76-3e2c-e507-e17906b923c5 XXX-THINLVM-DEDUP-FC --a
                     ./XenMigrateToProxmox.sh --m
@@ -29,6 +31,7 @@
 
  Параметры скрипта:
  
+                   
                      $1 - Имя сервера XCP-NG 
                          --m  вместо имени сервера включает GUI для запросов параметров
                          --ma  вместо имени сервера включает GUI для запросов параметров 
