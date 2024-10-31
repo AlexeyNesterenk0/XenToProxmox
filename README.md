@@ -23,10 +23,10 @@
 
 
 
-                    ./XenMigrateToProxmox.sh xen 847fb7ef-5d76-3e2c-e507-e17906b923c5 XXX-THINLVM-DEDUP-FC 100
-                    ./XenMigrateToProxmox.sh xen 847fb7ef-5d76-3e2c-e507-e17906b923c5 XXX-THINLVM-DEDUP-FC --a
-                    ./XenMigrateToProxmox.sh --m
-                    ./XenMigrateToProxmox.sh --ma
+                    ./WarmMigration.sh xen 847fb7ef-5d76-3e2c-e507-e17906b923c5 XXX-THINLVM-DEDUP-FC 100
+                    ./WarmMigration.sh xen 847fb7ef-5d76-3e2c-e507-e17906b923c5 XXX-THINLVM-DEDUP-FC --a
+                    ./WarmMigration.sh --m
+                    ./WarmMigration.sh --ma
                     
 
  Параметры скрипта:
