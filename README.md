@@ -1,6 +1,4 @@
 # XenMigrateToProxmox
-#WarmMigration
-
 Данный скрипт, запускаемый на хостовой машине, Proxmox 
 позволяет экспортировать посредством ЛВС и преобразовать "на лету" 
 файлы экспорта формата XVA в готовую QEMU виртуальную машину с автоматическим 
@@ -18,17 +16,17 @@
 
 Запуск скрипта:
 
-                    cmod +x WarmMigration.sh                    
-                    ./WarmMigration.sh {$1} {$2} {$3} {$4}
+                    cmod +x XenToProxmox.sh                    
+                    ./XenToProxmox.sh {$1} {$2} {$3} {$4}
                     
 Примеры:
 
 
 
-                    ./WarmMigration.sh xen 847fb7ef-5d76-3e2c-e507-e17906b923c5 XXX-THINLVM-DEDUP-FC 100
-                    ./WarmMigration.sh xen 847fb7ef-5d76-3e2c-e507-e17906b923c5 XXX-THINLVM-DEDUP-FC --a
-                    ./WarmMigration.sh --m
-                    ./WarmMigration.sh --ma
+                    ./XenToProxmox.sh xen 847fb7ef-5d76-3e2c-e507-e17906b923c5 XXX-THINLVM-DEDUP-FC 100
+                    ./XenToProxmox.sh xen 847fb7ef-5d76-3e2c-e507-e17906b923c5 XXX-THINLVM-DEDUP-FC --a
+                    ./XenToProxmox.sh --m
+                    ./XenToProxmox.sh --ma
                     
 
  Параметры скрипта:
