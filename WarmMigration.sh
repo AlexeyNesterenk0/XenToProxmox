@@ -1,5 +1,5 @@
 #!/bin/bash
-#Xen Migrate To Proxmox
+#Xen Warm MigrationMigrate To Proxmox
 #Version 1.0
 #Author : Aleksey Nesterenko 2023
 # example ./XenMigrateToProxmox.sh xen db83f273-ade0-1585-b1fa-b6197353c4df SHD-ZFS0-FC --a
