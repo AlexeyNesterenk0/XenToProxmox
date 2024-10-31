@@ -16,8 +16,8 @@
 
 Запуск скрипта:
 
-                    cmod +x XenMigrateToProxmox.sh                    
-                    ./XenMigrateToProxmox.sh {$1} {$2} {$3} {$4}
+                    cmod +x WarmMigration.sh                    
+                    ./WarmMigration.sh {$1} {$2} {$3} {$4}
                     
 Примеры:
 
