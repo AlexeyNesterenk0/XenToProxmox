@@ -43,6 +43,3 @@
 
 После запуска скрипт запрашивает пароль доступа к консоли XEN
 
-![image](https://github.com/AlexeyNesterenk0/XenToProxmox/assets/143705665/1d621751-f44a-4572-81a8-0e3088db2c10)
-
-
